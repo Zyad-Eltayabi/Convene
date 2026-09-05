@@ -1,3 +1,4 @@
+using API.Extensions;
 using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,5 +30,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await app.InitializeDatabaseAsync();
 
 app.Run();
