@@ -14,7 +14,6 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-// Register MediatR handlers before building the app (Services cannot be modified after Build)
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
 
 var app = builder.Build();

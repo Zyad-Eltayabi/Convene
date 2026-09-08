@@ -1,3 +1,4 @@
+using Application.Activities.Commands;
 using Application.Activities.Queries;
 using Domain.Entities;
 using MediatR;
@@ -15,5 +16,12 @@ public class ActivitiesController : BaseApiController
     {
         List<Activity> activities = await Mediator.Send(new GetActivityList.Query());
         return Ok(activities);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<string>> CreateNewActivity(Activity activity)
+    {
+        string activityId = await Mediator.Send(new CreateActivity.Command{ Activity = activity });
+        return Ok(activityId);
     }
 } 
