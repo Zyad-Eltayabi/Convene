@@ -1,4 +1,5 @@
 using API.Extensions;
+using Application.Activities.Queries;
 using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,9 +14,13 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// Register MediatR handlers before building the app (Services cannot be modified after Build)
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
+
 var app = builder.Build();
 
 app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://localhost:3000"));
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

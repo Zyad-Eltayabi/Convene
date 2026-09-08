@@ -1,22 +1,19 @@
-
+using Application.Activities.Queries;
+using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-class activity
-{
-    public string id { get; set; }
-    public string title { get; set; }
-}
 public class ActivitiesController : BaseApiController
 {
-    [HttpGet]
-    public async Task<IActionResult> GetActivities()
+   public ActivitiesController()
     {
-        List<activity> activities = new();
-        activities.Add(new activity { id = "1", title = "Activity 1" });
-        activities.Add(new activity { id = "2", title = "Activity 2" });
-        activities.Add(new activity { id = "3", title = "Activity 3" });
+    }
+    [HttpGet]
+    public async Task<ActionResult<List<Activity>>> GetActivities()
+    {
+        List<Activity> activities = await Mediator.Send(new GetActivityList.Query());
         return Ok(activities);
     }
 } 
