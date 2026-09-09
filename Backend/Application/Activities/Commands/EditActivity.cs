@@ -1,3 +1,4 @@
+using AutoMapper;
 using Domain.Entities;
 using Infrastructure.Persistence.Data;
 using MediatR;
@@ -14,10 +15,12 @@ public class EditActivity
     public class Handler : IRequestHandler<Command, Unit>
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public Handler(ApplicationDbContext context)
+        public Handler(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -28,13 +31,7 @@ public class EditActivity
                 throw new Exception("Activity not found");
             }
 
-            activity.Title = request.Activity.Title;
-            activity.Description = request.Activity.Description;
-            activity.Category = request.Activity.Category;
-            activity.Date = request.Activity.Date;
-            activity.City = request.Activity.City;
-            activity.Venue = request.Activity.Venue;
-
+            _mapper.Map(request.Activity, activity);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

@@ -1,5 +1,6 @@
 using API.Extensions;
 using Application.Activities.Queries;
+using Application.Core;
 using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddOpenApi();
 
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
+
+builder.Services.AddAutoMapper(x => x.AddMaps(typeof(MappingProfiles).Assembly));
 
 var app = builder.Build();
 
