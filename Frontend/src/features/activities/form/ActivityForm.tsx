@@ -34,6 +34,7 @@ export function ActivityForm({
 
     onFormSubmit(data as unknown as Activity);
     alert(`Form submitted with: ${JSON.stringify(data, null, 2)}`);
+    
   };
 
   return (

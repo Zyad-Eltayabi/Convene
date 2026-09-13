@@ -3,9 +3,14 @@ import ActivityCard from "./ActivityCard";
 type props = {
   activities: Activity[];
   onSelectActivity: (activityId: string) => void;
+  onDeleteActivity: (activityId: string) => void;
 };
 
-export default function ActivityList({ activities, onSelectActivity }: props) {
+export default function ActivityList({
+  activities,
+  onSelectActivity,
+  onDeleteActivity,
+}: props) {
   return (
     <div className="flex flex-col gap-4">
       <Card className="" variant="transparent">
@@ -14,6 +19,7 @@ export default function ActivityList({ activities, onSelectActivity }: props) {
             key={activity.id}
             activity={activity}
             onSelectActivity={onSelectActivity}
+            onDeleteActivity={onDeleteActivity}
           />
         ))}
       </Card>

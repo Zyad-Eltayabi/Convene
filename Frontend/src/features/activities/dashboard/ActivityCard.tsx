@@ -3,8 +3,13 @@ import { Button, Card, CloseButton } from "@heroui/react";
 type props = {
   activity: Activity;
   onSelectActivity: (activityId: string) => void;
+  onDeleteActivity: (activityId: string) => void;
 };
-export default function ActivityCard({ activity, onSelectActivity }: props) {
+export default function ActivityCard({
+  activity,
+  onSelectActivity,
+  onDeleteActivity,
+}: props) {
   return (
     <Card className="w-full items-stretch md:flex-row">
       <div className="relative h-[140px] w-full shrink-0 overflow-hidden rounded-2xl sm:h-[120px] sm:w-[120px]">
@@ -24,8 +29,8 @@ export default function ActivityCard({ activity, onSelectActivity }: props) {
             className="absolute end-3 top-3"
           />
         </Card.Header>
-        <Card.Footer className="mt-auto flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-col">
+        <Card.Footer className="mt-auto block">
+          <div className="flex flex-col w-full">
             <span className="text-sm font-medium text-foreground">
               {activity.city} / {activity.venue}
             </span>
@@ -34,9 +39,20 @@ export default function ActivityCard({ activity, onSelectActivity }: props) {
               {activity.category}
             </span>
           </div>
-          <Button className="w-full sm:w-auto" onClick={() => onSelectActivity(activity.id)}>
-            View Details
-          </Button>
+          <div className="mt-2 flex flex-row gap-2 flex-wrap justify-end">
+            <Button
+              onClick={() => onDeleteActivity(activity.id)}
+              variant="danger-soft"
+            >
+              Delete
+            </Button>
+            <Button
+              className="w-full sm:w-auto"
+              onClick={() => onSelectActivity(activity.id)}
+            >
+              View Details
+            </Button>
+          </div>
         </Card.Footer>
       </div>
     </Card>

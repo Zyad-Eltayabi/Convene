@@ -11,6 +11,7 @@ type Props = {
   closeForm?: () => void;
   editMode?: boolean;
   onFormSubmit: (activity: Activity) => void;
+  onDeleteActivity: (activityId: string) => void;
 };
 export default function ActivityDashboard({
   activities,
@@ -21,6 +22,7 @@ export default function ActivityDashboard({
   closeForm,
   editMode,
   onFormSubmit,
+  onDeleteActivity,
 }: Props) {
   return (
     <div className="grid grid-cols-9 gap-3">
@@ -28,6 +30,7 @@ export default function ActivityDashboard({
         <ActivityList
           activities={activities}
           onSelectActivity={onSelectActivity}
+          onDeleteActivity={onDeleteActivity}
         />
       </div>
       <div className="col-span-3">

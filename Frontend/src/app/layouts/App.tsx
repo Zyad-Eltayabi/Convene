@@ -52,6 +52,15 @@ function App() {
     setEditMode(false);
   };
 
+  const handleDeleteActivity = (activityId: string) => {
+    setActivities((prevActivities) =>
+      prevActivities.filter((a) => a.id !== activityId),
+    );
+    if (selectedActivity?.id === activityId) {
+      setSelectedActivity(null);
+    }
+  };
+
   return (
     <div className="container mx-auto  min-h-screen">
       <Navbar onOpenForm={handleOpenForm} />
@@ -64,6 +73,7 @@ function App() {
         openForm={handleOpenForm}
         closeForm={handleCloseForm}
         onFormSubmit={handleFormSubmit}
+        onDeleteActivity={handleDeleteActivity}
       />
     </div>
   );
