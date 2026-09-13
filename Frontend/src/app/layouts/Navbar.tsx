@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-export default function Navbar() {
+type NavbarProps = {
+  onOpenForm: (id?: string) => void;
+};
+
+export default function Navbar({ onOpenForm }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <nav className="bg-white border-gray-200 py-2.5 dark:bg-gray-900">
@@ -15,12 +19,12 @@ export default function Navbar() {
             <span></span>
           </div>
 
-          <a
-            href="https://themesberg.com/product/tailwind-css/landing-page"
+          <button
             className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"
+            onClick={() => onOpenForm()}
           >
             Create Activity
-          </a>
+          </button>
           <button
             data-collapse-toggle="mobile-menu-2"
             type="button"
