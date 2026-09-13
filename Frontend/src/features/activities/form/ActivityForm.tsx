@@ -11,22 +11,28 @@ import {
   TextArea,
   TextField,
 } from "@heroui/react";
-
+import { parseDate } from "@internationalized/date";
 type ActivityFormProps = {
   activity?: Activity | null;
   closeForm?: () => void;
+  onFormSubmit: (activity: Activity) => void;
 };
-export function ActivityForm({ activity, closeForm }: ActivityFormProps) {
+export function ActivityForm({
+  activity,
+  closeForm,
+  onFormSubmit,
+}: ActivityFormProps) {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data: Record<string, string> = {};
+    const data: { [key: string]: FormDataEntryValue } = {};
 
     // Convert FormData to plain object
     formData.forEach((value, key) => {
       data[key] = value.toString();
     });
 
+    onFormSubmit(data as unknown as Activity);
     alert(`Form submitted with: ${JSON.stringify(data, null, 2)}`);
   };
 
@@ -37,6 +43,7 @@ export function ActivityForm({ activity, closeForm }: ActivityFormProps) {
       onSubmit={onSubmit}
     >
       <TextField
+        defaultValue={activity?.title || ""}
         isRequired
         name="title"
         type="text"
@@ -48,62 +55,86 @@ export function ActivityForm({ activity, closeForm }: ActivityFormProps) {
         }}
       >
         <Label>Title</Label>
-        <Input
-          placeholder="Enter the activity title"
-          value={activity?.title || ""}
-        />
+        <Input placeholder="Enter the activity title" />
         <Description>Enter a title for the activity</Description>
         <FieldError />
       </TextField>
 
-      <div>
-        <Label className="text-sm font-medium text-gray-700 block">
-          Description
-        </Label>
-        <TextArea
-          fullWidth={true}
-          required={true}
-          aria-label="Quick project update"
-          placeholder="Describe the activity in detail"
-          className="mt-1 block  rounded-md"
-        >
-          <FieldError />
-        </TextArea>
-      </div>
+      <TextField
+        isRequired
+        name="description"
+        defaultValue={activity?.description || ""}
+      >
+        <Label>Description</Label>
 
-      <TextField isRequired name="category" type="text">
+        <TextArea
+          fullWidth
+          placeholder="Describe the activity in detail"
+          className="mt-1 block rounded-md"
+        />
+
+        <FieldError />
+      </TextField>
+
+      <TextField
+        isRequired
+        name="category"
+        type="text"
+        defaultValue={activity?.category || ""}
+      >
         <Label>Category</Label>
         <Input placeholder="Enter the activity category" />
         <Description>Enter a category for the activity</Description>
         <FieldError />
       </TextField>
 
-      <TextField isRequired name="city" type="text">
+      <TextField
+        isRequired
+        name="city"
+        type="text"
+        defaultValue={activity?.city || ""}
+      >
         <Label>City</Label>
         <Input placeholder="Enter the activity city" />
-        <Description>Enter a city for the activity</Description>
+        <Description>Enter the activity city</Description>
         <FieldError />
       </TextField>
 
-      <TextField isRequired name="venue" type="text">
+      <TextField
+        isRequired
+        name="venue"
+        type="text"
+        defaultValue={activity?.venue || ""}
+      >
         <Label>Venue</Label>
         <Input placeholder="Enter the activity venue" />
-        <Description>Enter a venue for the activity</Description>
+        <Description>Enter the activity venue</Description>
         <FieldError />
       </TextField>
 
-      <DatePicker className="w-72" name="date" isRequired>
+      <DatePicker
+        className="w-72"
+        name="date"
+        isRequired
+        //defaultValue={activity?.date || undefined}
+        defaultValue={
+          activity?.date ? parseDate(activity.date.split("T")[0]) : undefined
+        }
+      >
         <Label>Date</Label>
+
         <DateField.Group fullWidth>
           <DateField.Input>
             {(segment) => <DateField.Segment segment={segment} />}
           </DateField.Input>
+
           <DateField.Suffix>
             <DatePicker.Trigger>
               <DatePicker.TriggerIndicator />
             </DatePicker.Trigger>
           </DateField.Suffix>
         </DateField.Group>
+
         <DatePicker.Popover>
           <Calendar aria-label="Event date">
             <Calendar.Header>
@@ -111,17 +142,21 @@ export function ActivityForm({ activity, closeForm }: ActivityFormProps) {
                 <Calendar.YearPickerTriggerHeading />
                 <Calendar.YearPickerTriggerIndicator />
               </Calendar.YearPickerTrigger>
+
               <Calendar.NavButton slot="previous" />
               <Calendar.NavButton slot="next" />
             </Calendar.Header>
+
             <Calendar.Grid>
               <Calendar.GridHeader>
                 {(day) => <Calendar.HeaderCell>{day}</Calendar.HeaderCell>}
               </Calendar.GridHeader>
+
               <Calendar.GridBody>
                 {(date) => <Calendar.Cell date={date} />}
               </Calendar.GridBody>
             </Calendar.Grid>
+
             <Calendar.YearPickerGrid>
               <Calendar.YearPickerGridBody>
                 {({ year }) => <Calendar.YearPickerCell year={year} />}
@@ -133,9 +168,11 @@ export function ActivityForm({ activity, closeForm }: ActivityFormProps) {
 
       <div className="flex gap-2">
         <Button type="submit">Submit</Button>
-        <Button onClick={closeForm} type="submit">
+
+        <Button onClick={closeForm} type="button">
           Cancel
         </Button>
+
         <Button type="reset" variant="secondary">
           Reset
         </Button>

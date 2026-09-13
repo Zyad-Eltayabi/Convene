@@ -18,6 +18,7 @@ function App() {
   const handleSelectActivity = (activityId: string) => {
     const activity = activities.find((a) => a.id === activityId) || null;
     setSelectedActivity(activity);
+    setEditMode(false);
   };
 
   const handleCancelSelectActivity = () => {
@@ -26,6 +27,7 @@ function App() {
 
   const handleOpenForm = (id?: string) => {
     if (id) {
+      console.log("Opening form for activity with ID:", id);
       handleSelectActivity(id);
     } else {
       handleCancelSelectActivity();
@@ -34,7 +36,20 @@ function App() {
   };
 
   const handleCloseForm = () => {
-    setEditMode(false); 
+    setEditMode(false);
+  };
+
+  const handleFormSubmit = (activity: Activity) => {
+    if (activity.id) {
+      setActivities((prevActivities) =>
+        prevActivities.map((a) => (a.id === activity.id ? activity : a)),
+      );
+    } else {
+      // Create new activity
+      const newActivity = { ...activity, id: Date.now().toString() };
+      setActivities((prevActivities) => [...prevActivities, newActivity]);
+    }
+    setEditMode(false);
   };
 
   return (
@@ -48,6 +63,7 @@ function App() {
         editMode={editMode}
         openForm={handleOpenForm}
         closeForm={handleCloseForm}
+        onFormSubmit={handleFormSubmit}
       />
     </div>
   );
