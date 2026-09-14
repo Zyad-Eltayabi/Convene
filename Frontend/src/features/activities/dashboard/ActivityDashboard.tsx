@@ -1,55 +1,46 @@
-import ActivityDetails from "../details/ActivityDetails";
-import { ActivityForm } from "../form/ActivityForm";
+import { Grid } from "@mui/material";
 import ActivityList from "./ActivityList";
+import ActivityDetails from "../details/ActivityDetails";
+import ActivityForm from "../form/ActivitityForm";
 
 type Props = {
-  activities: Activity[];
-  onSelectActivity: (activityId: string) => void;
-  onCancelSelectActivity: () => void;
-  selectedActivity: Activity | null;
-  openForm?: (id?: string) => void;
-  closeForm?: () => void;
-  editMode?: boolean;
-  onFormSubmit: (activity: Activity) => void;
-  onDeleteActivity: (activityId: string) => void;
-};
-export default function ActivityDashboard({
-  activities,
-  onSelectActivity,
-  onCancelSelectActivity,
-  selectedActivity,
-  openForm,
-  closeForm,
-  editMode,
-  onFormSubmit,
-  onDeleteActivity,
-}: Props) {
-  return (
-    <div className="grid grid-cols-9 gap-3">
-      <div className="col-span-6">
-        <ActivityList
-          activities={activities}
-          onSelectActivity={onSelectActivity}
-          onDeleteActivity={onDeleteActivity}
-        />
-      </div>
-      <div className="col-span-3">
-        {selectedActivity && !editMode && (
-          <ActivityDetails
-            activity={selectedActivity}
-            onCancel={onCancelSelectActivity}
-            openForm={openForm}
-          />
-        )}
-        {editMode && (
-          <ActivityForm
-            closeForm={closeForm}
-            activity={selectedActivity}
-            onFormSubmit={onFormSubmit}
-          />
-        )}
-      </div>
-      <div></div>
-    </div>
-  );
+    activities: Activity[]
+    selectActivity: (id: string) => void
+    cancelSelect: () => void
+    selectedActivity?: Activity
+    openForm: (id: string) => void
+    closeForm: () => void
+    editMode: boolean
+    submitForm: (activity: Activity) => void;
+    deleteActivity: (id: string) => void
+}
+
+export default function ActivityDashboard({ activities, selectActivity, selectedActivity, cancelSelect, openForm, closeForm, editMode, submitForm, deleteActivity }: Props) {
+    return (
+        <Grid container spacing={3}>
+            <Grid size={7}>
+                <ActivityList 
+                    activities={activities} 
+                    selectActivity={selectActivity} 
+                    deleteActivity={deleteActivity}
+                />
+            </Grid>
+            <Grid size={5}>
+                {selectedActivity && !editMode &&
+                    <ActivityDetails
+                        activity={selectedActivity}
+                        cancelSelect={cancelSelect}
+                        openForm={openForm}
+                    />
+                }
+                {editMode &&
+                <ActivityForm 
+                    closeForm={closeForm} 
+                    activity={selectedActivity} 
+                    submitForm={submitForm}
+                />
+                }
+            </Grid>
+        </Grid>
+    )
 }

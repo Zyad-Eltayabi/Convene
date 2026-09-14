@@ -1,44 +1,27 @@
-import { Button, Card } from "@heroui/react";
+import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
 
 type Props = {
-  activity: Activity;
-  onCancel?: () => void;
-  openForm?: (id?: string) => void;
-};
-export default function ActivityDetails({
-  activity,
-  onCancel,
-  openForm,
-}: Props) {
-  console.log("ActivityDetails rendered with activity:", activity);
-  return (
-    <div className="flex flex-wrap gap-4 w-full">
-      <Card className=" gap-2">
-        <img
-          alt={`${activity.category} community`}
-          className="pointer-events-none aspect-square w-full h-100 rounded-2xl object-cover select-none"
-          loading="lazy"
-          src={`/images/categoryImages/${activity.category}.jpg`}
-        />
-        <Card.Header>
-          <Card.Title>{activity.title}</Card.Title>
-          <Card.Description>{activity.description}</Card.Description>
-        </Card.Header>
-        <Card.Footer className="flex gap-2 flex-col align-start">
-          <span className="text-xs block">{activity.date}</span>
-          <div>
-            <Button
-              onClick={() => openForm && openForm(activity.id)}
-              className="w-full sm:w-auto m-1"
-            >
-              Edit
-            </Button>
-            <Button className="w-full sm:w-auto m-1" onClick={onCancel}>
-              Cancel
-            </Button>
-          </div>
-        </Card.Footer>
-      </Card>
-    </div>
-  );
+    activity: Activity;
+    cancelSelect: () => void
+    openForm: (id: string) => void
+}
+
+export default function ActivityDetails({ activity, cancelSelect, openForm }: Props) {
+    return (
+        <Card sx={{ borderRadius: 3 }}>
+            <CardMedia
+                component='img'
+                src={`/images/categoryImages/${activity.category}.jpg`}
+            />
+            <CardContent>
+                <Typography variant="h5">{activity.title}</Typography>
+                <Typography variant="subtitle1" fontWeight='light'>{activity.date}</Typography>
+                <Typography variant="body1">{activity.description}</Typography>
+            </CardContent>
+            <CardActions>
+                <Button onClick={() => openForm(activity.id)}  color="primary">Edit</Button>
+                <Button onClick={cancelSelect} color='inherit'>Cancel</Button>
+            </CardActions>
+        </Card>
+    )
 }
