@@ -364,3 +364,4 @@ FodyWeavers.xsd
 /.github
 /Backend/API/appsettings.json
 dist/
+.vscode/
