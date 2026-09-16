@@ -12,6 +12,7 @@ type Props = {
   closeForm: () => void;
   editMode: boolean;
   deleteActivity: (id: string) => void;
+  
 };
 
 export default function ActivityDashboard({
