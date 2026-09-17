@@ -24,7 +24,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "createActivity",
-        element: <ActivityForm />,
+        element: <ActivityForm key="create" />,
       },
       {
         path: "manage/:id",
