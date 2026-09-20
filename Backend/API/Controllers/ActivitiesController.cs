@@ -1,4 +1,5 @@
 using Application.Activities.Commands;
+using Application.Activities.DTOs;
 using Application.Activities.Queries;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +19,12 @@ public class ActivitiesController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<ActionResult<string>> CreateNewActivity(Activity activity)
+    public async Task<ActionResult<string>> CreateNewActivity(CreateActivityDto activityDto)
     {
         string activityId = await Mediator.Send(
             new CreateActivity.Command
             {
-                Activity = activity
+                Activity = activityDto
             });
 
         return Ok(activityId);
