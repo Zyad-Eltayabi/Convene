@@ -1,3 +1,4 @@
+using Application.Core;
 using Infrastructure.Persistence.Data;
 using MediatR;
 
@@ -5,25 +6,28 @@ namespace Application.Activities.Commands;
 
 public class DeleteActivity
 {
-    public record Command : IRequest<Unit>
+    public record Command : IRequest<Result<Unit>>
     {
         public required string Id { get; init; }
     }
 
-    public class Handler(ApplicationDbContext context) : IRequestHandler<Command, Unit>
+    public class Handler(ApplicationDbContext context) : IRequestHandler<Command, Result<Unit>>
     {
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
             var activity = await context.Activities.FindAsync(request.Id, cancellationToken);
             if (activity is null)
             {
-                throw new Exception("Activity not found");
+                return Result<Unit>.Failure("Activity not found", 404);
             }
 
             context.Activities.Remove(activity);
-            await context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
+            var result = await context.SaveChangesAsync(cancellationToken) > 0;
+            if(!result)
+            {
+                return Result<Unit>.Failure("Failed to delete activity");
+            }
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

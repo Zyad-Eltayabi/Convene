@@ -10,7 +10,7 @@ public abstract class BaseApiController : ControllerBase
 {
     protected IMediator Mediator => HttpContext.RequestServices.GetRequiredService<IMediator>() ?? throw new InvalidOperationException("Mediator not found.");
 
-    protected ActionResult<T> HandleResult<T>(Result<T> result)
+    protected ActionResult HandleResult<T>(Result<T> result)
     {
         if(!result.IsSuccess)
         {

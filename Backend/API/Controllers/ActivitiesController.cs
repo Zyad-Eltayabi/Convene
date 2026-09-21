@@ -14,20 +14,13 @@ public class ActivitiesController : BaseApiController
     [HttpGet]
     public async Task<ActionResult<List<Activity>>> GetActivities()
     {
-        List<Activity> activities = await Mediator.Send(new GetActivities.Query());
-        return Ok(activities);
+        return HandleResult(await Mediator.Send(new GetActivities.Query()));
     }
 
     [HttpPost]
     public async Task<ActionResult<string>> CreateNewActivity(CreateActivityDto activityDto)
     {
-        string activityId = await Mediator.Send(
-            new CreateActivity.Command
-            {
-                Activity = activityDto
-            });
-
-        return Ok(activityId);
+        return HandleResult(await Mediator.Send(new CreateActivity.Command { Activity = activityDto }));
     }
 
     [HttpPut()]
