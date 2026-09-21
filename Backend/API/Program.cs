@@ -43,6 +43,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await app.InitializeDatabaseAsync();
+// pause the database initialization for now, as it may not be needed in all environments
+// await app.InitializeDatabaseAsync();
 
 app.Run();
