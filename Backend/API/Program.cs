@@ -1,4 +1,5 @@
 using API.Extensions;
+using API.Middlewares;
 using Application;
 using Infrastructure;
 
@@ -16,7 +17,11 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddApplication();
 
+builder.Services.AddTransient<ExceptionMiddleware>();
+
 WebApplication app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://localhost:3000"));
 
