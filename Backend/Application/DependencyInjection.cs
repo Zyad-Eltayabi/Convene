@@ -11,7 +11,10 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivities.Query>());
+        services.AddMediatR(x => {
+            x.RegisterServicesFromAssemblyContaining<GetActivities.Handler>();
+            x.AddOpenBehavior(typeof(ValidationBehavior<,>));
+        });
         services.AddAutoMapper(x => x.AddMaps(typeof(MappingProfiles).Assembly));
         services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
         return services;
