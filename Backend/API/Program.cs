@@ -1,25 +1,22 @@
 using API.Extensions;
-using Application.Activities.Queries;
-using Application.Core;
+using Application;
 using Infrastructure;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddCors();
 
 builder.Services.AddControllers();
 
-builder.Services.AddInfrastructure(builder.Configuration);
-
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivities.Query>());
+builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddAutoMapper(x => x.AddMaps(typeof(MappingProfiles).Assembly));
+builder.Services.AddApplication();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://localhost:3000"));
 
