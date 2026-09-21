@@ -9,5 +9,7 @@ public class MappingProfiles : Profile
     public MappingProfiles()
     {
         CreateMap<CreateActivityDto, Activity>().ReverseMap();
+        CreateMap<EditActivityDto, Activity>().ReverseMap();
+
     }
 }

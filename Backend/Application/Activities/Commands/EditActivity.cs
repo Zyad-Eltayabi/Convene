@@ -1,3 +1,4 @@
+using Application.Activities.DTOs;
 using Application.Core;
 using AutoMapper;
 using Domain.Entities;
@@ -10,7 +11,7 @@ public class EditActivity
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public required Activity Activity { get; set; } = null!;
+        public required EditActivityDto Activity { get; set; } = null!;
     }
 
     public class Handler : IRequestHandler<Command, Result<Unit>>
