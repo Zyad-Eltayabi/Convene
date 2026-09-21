@@ -2,6 +2,7 @@ using Application.Activities.Commands;
 using Application.Activities.DTOs;
 using Application.Activities.Queries;
 using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -26,15 +27,13 @@ public class ActivitiesController : BaseApiController
     [HttpPut()]
     public async Task<IActionResult> EditActivity(Activity activity)
     {
-        await Mediator.Send(new UpdateActivity.Command { Activity = activity });
-        return NoContent();
+        return HandleResult(await Mediator.Send(new EditActivity.Command { Activity = activity }));
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteActivity(string id)
     {
-        await Mediator.Send(new DeleteActivity.Command { Id = id });
-        return Ok();
+        return HandleResult(await Mediator.Send(new DeleteActivity.Command { Id = id }));
     }
 
     [HttpGet("{id}")]

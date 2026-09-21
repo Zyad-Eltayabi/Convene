@@ -1,9 +1,10 @@
-﻿using FluentValidation;
+﻿using Application.Core;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Middlewares;
 
-public class ExceptionMiddleware : IMiddleware
+public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger,IHostEnvironment host) : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -15,23 +16,25 @@ public class ExceptionMiddleware : IMiddleware
         {
             await HandleValidationException(context, ex);
         }
-        catch (UnauthorizedAccessException ex)
-        {
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            await context.Response.WriteAsJsonAsync(new { Error = ex.Message });
-        }
-        catch (KeyNotFoundException ex)
-        {
-            context.Response.StatusCode = StatusCodes.Status404NotFound;
-            await context.Response.WriteAsJsonAsync(new { Error = ex.Message });
-        }
         catch (Exception ex)
         {
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            await context.Response.WriteAsJsonAsync(new { Error = "An unexpected error occurred." });
-            Console.WriteLine($"Exception: {ex.Message}");
+            await HandleException(context, ex);
         }
     }
+
+    private  async Task HandleException(HttpContext context, Exception ex)
+    {
+        logger.LogError($"Message : {ex.Message} :::: Exception: {ex}");
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        var response = host.IsDevelopment()
+            ? new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace)
+            : new AppException(context.Response.StatusCode, "An unexpected error occurred.",null);
+        var options = new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase };
+        var json = System.Text.Json.JsonSerializer.Serialize(response, options);
+        await context.Response.WriteAsJsonAsync(response);
+    }
+
     private static async Task HandleValidationException(HttpContext context, ValidationException ex)
     {
         var errors = new Dictionary<string, string[]>();
