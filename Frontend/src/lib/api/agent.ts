@@ -21,10 +21,20 @@ agent.interceptors.response.use(
     await new Promise((resolve) => setTimeout(resolve, 1000));
     store.uiStore.isIdle();
     console.log("Error in API response:", error.response);
-    const status = error.response?.status;
+    const { data, status } = error.response;
     switch (status) {
       case 400:
-        toast.error("Bad Request");
+        if (data.errors) {
+          const modelStateErrors: string[] = [];
+          for (const key in data.errors) {
+            if (data.errors[key]) {
+              modelStateErrors.push(data.errors[key]);
+            }
+          }
+          throw modelStateErrors.flat();
+        } else {
+          toast.error(data.title);
+        }
         break;
       case 401:
         toast.error("Unauthorized");
@@ -36,7 +46,9 @@ agent.interceptors.response.use(
         router.navigate("/not-found");
         break;
       case 500:
-        toast.error("Internal Server Error");
+        router.navigate("/server-error", {
+          state: { error: data },
+        });
         break;
     }
     return Promise.reject(error);

@@ -23,6 +23,7 @@ export default function TestErrors() {
       } else {
         setValidationErrors([]);
       }
+      console.log(validationErrors);
     },
   });
 
