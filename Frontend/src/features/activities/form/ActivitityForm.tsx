@@ -1,36 +1,58 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useActivities } from "../../../lib/hooks/useActivities";
-import { useNavigate, useParams } from "react-router";
+import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
+import { useEffect } from "react";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  activitySchema,
+  type ActivitySchemaType,
+} from "../../../lib/schemas/Activityschema";
 
 export default function ActivityForm() {
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ActivitySchemaType>({
+    mode: "onTouched",
+    resolver: zodResolver(activitySchema),
+    defaultValues: {
+      latitude: 0,
+      longitude: 0,
+    },
+  });
   const { id } = useParams<{ id: string }>();
   const { updateActivity, createActivity, activity, isActivityLoading } =
     useActivities(id);
-  const navigate = useNavigate();
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+  const onSubmit = async (data: ActivitySchemaType) => {
+    const activityData: Activity = {
+      ...activity,
+      id: activity?.id ?? "",
+      isCancelled: activity?.isCancelled ?? false,
+      ...data,
+      date: new Date(data.date).toISOString(),
+    };
 
-    const data: { [key: string]: FormDataEntryValue } = {};
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
-
-    if (activity) {
-      data.id = activity.id;
-      await updateActivity.mutateAsync(data as unknown as Activity);
-      navigate(`/activities/${activity.id}`);
-    } else {
-      createActivity.mutate(data as unknown as Activity, {
-        onSuccess: (id) => {
-          navigate(`/activities/${id}`);
-        },
-      });
-    }
+    console.log("Submitting activity data:", activityData);
+    // if (activity) {
+    //   await updateActivity.mutateAsync(activityData);
+    // } else {
+    //   await createActivity.mutateAsync(activityData);
+    // }
   };
 
-  
+  useEffect(() => {
+    if (activity) {
+      reset({
+        ...activity,
+        date: new Date(activity.date).toISOString().split("T")[0],
+      });
+    }
+  }, [activity, reset]);
 
   if (isActivityLoading) {
     return <Typography>Loading...</Typography>;
@@ -42,47 +64,50 @@ export default function ActivityForm() {
       </Typography>
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         display="flex"
         flexDirection="column"
         gap={3}
       >
         <TextField
-          name="title"
+          {...register("title")}
           label="Title"
-          defaultValue={activity?.title || ""}
+          error={!!errors.title}
+          helperText={errors.title?.message}
         />
         <TextField
-          name="description"
+          {...register("description")}
           label="Description"
-          defaultValue={activity?.description || ""}
           multiline
           rows={3}
+          error={!!errors.description}
+          helperText={errors.description?.message}
         />
         <TextField
-          name="category"
-          defaultValue={activity?.category || ""}
+          {...register("category")}
           label="Category"
+          error={!!errors.category}
+          helperText={errors.category?.message}
         />
         <TextField
-          name="date"
-          defaultValue={
-            activity?.date
-              ? new Date(activity.date).toISOString().split("T")[0]
-              : ""
-          }
+          {...register("date")}
           label="Date"
           type="date"
+          InputLabelProps={{ shrink: true }}
+          error={!!errors.date}
+          helperText={errors.date?.message}
         />
         <TextField
-          name="city"
-          defaultValue={activity?.city || ""}
+          {...register("city")}
           label="City"
+          error={!!errors.city}
+          helperText={errors.city?.message}
         />
         <TextField
-          name="venue"
-          defaultValue={activity?.venue || ""}
+          {...register("venue")}
           label="Venue"
+          error={!!errors.venue}
+          helperText={errors.venue?.message}
         />
         <Box display="flex" justifyContent="end" gap={3}>
           <Button color="inherit">Cancel</Button>
