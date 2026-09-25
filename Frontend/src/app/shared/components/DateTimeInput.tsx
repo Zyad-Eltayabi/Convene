@@ -12,7 +12,7 @@ export default function DateTimeInput<T extends FieldValues>(props: Props<T>) {
   return (
     <DateTimePicker
       {...props}
-      value={field.value ? new Date(field.value) : undefined}
+      value={field.value ? new Date(field.value) : new Date()} // Ensure the value is a Date object
       onChange={(date) => field.onChange(date)}
       sx={{ width: "100%" }}
       slotProps={{
