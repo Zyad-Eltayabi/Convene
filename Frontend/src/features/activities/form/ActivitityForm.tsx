@@ -1,4 +1,4 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 import { useActivities } from "../../../lib/hooks/useActivities";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
@@ -8,14 +8,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   activitySchema,
   type ActivitySchemaType,
-} from "../../../lib/schemas/Activityschema";
+} from "../../../lib/schemas/ActivitySchema";
+import TextInput from "../../../app/shared/components/TextInput";
 
 export default function ActivityForm() {
   const {
-    register,
     reset,
     handleSubmit,
-    formState: { errors },
+    control,
   } = useForm<ActivitySchemaType>({
     mode: "onTouched",
     resolver: zodResolver(activitySchema),
@@ -69,46 +69,19 @@ export default function ActivityForm() {
         flexDirection="column"
         gap={3}
       >
-        <TextField
-          {...register("title")}
-          label="Title"
-          error={!!errors.title}
-          helperText={errors.title?.message}
-        />
-        <TextField
-          {...register("description")}
-          label="Description"
+        <TextInput label="Title" name="title" control={control} />
+        <TextInput
+          label="description"
+          name="description"
+          control={control}
           multiline
           rows={3}
-          error={!!errors.description}
-          helperText={errors.description?.message}
         />
-        <TextField
-          {...register("category")}
-          label="Category"
-          error={!!errors.category}
-          helperText={errors.category?.message}
-        />
-        <TextField
-          {...register("date")}
-          label="Date"
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          error={!!errors.date}
-          helperText={errors.date?.message}
-        />
-        <TextField
-          {...register("city")}
-          label="City"
-          error={!!errors.city}
-          helperText={errors.city?.message}
-        />
-        <TextField
-          {...register("venue")}
-          label="Venue"
-          error={!!errors.venue}
-          helperText={errors.venue?.message}
-        />
+        <TextInput label="category" name="category" control={control} />
+        <TextInput label="Date" name="date" control={control} />
+        <TextInput label="City" name="city" control={control} />
+        <TextInput label="Venue" name="venue" control={control} />
+
         <Box display="flex" justifyContent="end" gap={3}>
           <Button color="inherit">Cancel</Button>
           <Button
