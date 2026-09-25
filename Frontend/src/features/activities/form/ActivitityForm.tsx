@@ -12,13 +12,10 @@ import {
 import TextInput from "../../../app/shared/components/TextInput";
 import SelectInput from "../../../app/shared/components/SelectInput";
 import { categoryOptions } from "./CategoryOptions";
+import DateTimeInput from "../../../app/shared/components/DateTimeInput";
 
 export default function ActivityForm() {
-  const {
-    reset,
-    handleSubmit,
-    control,
-  } = useForm<ActivitySchemaType>({
+  const { reset, handleSubmit, control } = useForm<ActivitySchemaType>({
     mode: "onTouched",
     resolver: zodResolver(activitySchema),
     defaultValues: {
@@ -52,7 +49,7 @@ export default function ActivityForm() {
     if (activity) {
       reset({
         ...activity,
-        date: new Date(activity.date).toISOString().split("T")[0],
+        date: activity.date ? new Date(activity.date) : undefined,
       });
     }
   }, [activity, reset]);
@@ -84,10 +81,12 @@ export default function ActivityForm() {
           label="category"
           name="category"
           control={control}
-          items={categoryOptions} open={false}        />
-        <TextInput label="Date" name="date" control={control} />
+          items={categoryOptions}
+          open={false}
+        />
         <TextInput label="City" name="city" control={control} />
         <TextInput label="Venue" name="venue" control={control} />
+        <DateTimeInput label="Date" name="date" control={control} />
 
         <Box display="flex" justifyContent="end" gap={3}>
           <Button color="inherit">Cancel</Button>

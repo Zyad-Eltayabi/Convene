@@ -7,7 +7,10 @@ export const activitySchema = z.object({
   title: requiredField("Title")
     .min(3, "Title must be between 3 and 265 characters")
     .max(265, "Title must be between 3 and 265 characters"),
-  date: requiredField("Date"),
+  date: z.coerce.date({
+    required_error: "Date is required",
+    invalid_type_error: "Date must be a valid date",
+  }),
   description: requiredField("Description")
     .min(10, "Description must be between 10 and 2000 characters")
     .max(2000, "Description must be between 10 and 2000 characters"),
