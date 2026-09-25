@@ -10,6 +10,8 @@ import {
   type ActivitySchemaType,
 } from "../../../lib/schemas/ActivitySchema";
 import TextInput from "../../../app/shared/components/TextInput";
+import SelectInput from "../../../app/shared/components/SelectInput";
+import { categoryOptions } from "./CategoryOptions";
 
 export default function ActivityForm() {
   const {
@@ -29,6 +31,7 @@ export default function ActivityForm() {
     useActivities(id);
 
   const onSubmit = async (data: ActivitySchemaType) => {
+    console.log("Form data before submission:", data);
     const activityData: Activity = {
       ...activity,
       id: activity?.id ?? "",
@@ -77,7 +80,11 @@ export default function ActivityForm() {
           multiline
           rows={3}
         />
-        <TextInput label="category" name="category" control={control} />
+        <SelectInput
+          label="category"
+          name="category"
+          control={control}
+          items={categoryOptions} open={false}        />
         <TextInput label="Date" name="date" control={control} />
         <TextInput label="City" name="city" control={control} />
         <TextInput label="Venue" name="venue" control={control} />
