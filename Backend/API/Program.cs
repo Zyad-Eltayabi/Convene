@@ -1,3 +1,4 @@
+using API.Extensions;
 using API.Middlewares;
 using Application;
 using Domain.Entities;
@@ -57,6 +58,6 @@ app.MapControllers();
 app.MapGroup("api")
     .MapIdentityApi<User>();
 // pause the database initialization for now, as it may not be needed in all environments
-// await app.InitializeDatabaseAsync();
+ await app.InitializeDatabaseAsync();
 
 app.Run();
