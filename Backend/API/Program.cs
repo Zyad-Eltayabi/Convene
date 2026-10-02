@@ -1,7 +1,9 @@
-using API.Extensions;
 using API.Middlewares;
 using Application;
+using Domain.Entities;
 using Infrastructure;
+using Infrastructure.Persistence.Data;
+using Microsoft.AspNetCore.Identity;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,13 @@ builder.Services.AddOpenApi();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddApplication();
+
+builder.Services.AddIdentityApiEndpoints<User>(opt =>
+{
+    opt.User.RequireUniqueEmail = true;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddTransient<ExceptionMiddleware>();
 
@@ -39,10 +48,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGroup("api")
+    .MapIdentityApi<User>();
 // pause the database initialization for now, as it may not be needed in all environments
 // await app.InitializeDatabaseAsync();
 
