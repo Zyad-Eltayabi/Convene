@@ -16,6 +16,17 @@ public class AccountsController : BaseApiController
         return HandleResult(await Mediator.Send(new Register.Command { RegisterDto = registerDto }));
     }
 
+    [HttpPost("signout")]
+    public async Task<ActionResult> SignOut()
+    {
+        if (User.Identity?.IsAuthenticated != true)
+        {
+            return Unauthorized();
+        }
+
+        return HandleResult(await Mediator.Send(new SignOut.Command()));
+    }
+
     [AllowAnonymous]
     [HttpGet("userinfo")]
     public async Task<ActionResult<UserInfoDto>> GetUserInfo()
