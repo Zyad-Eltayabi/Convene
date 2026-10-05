@@ -33,7 +33,7 @@ public class AccountsController : BaseApiController
     {
         if (User.Identity?.IsAuthenticated != true)
         {
-            return Unauthorized();
+            return NoContent();
         }
 
         string userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;

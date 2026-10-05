@@ -1,7 +1,5 @@
 import { z } from "zod";
-
-const requiredField = (fieldName: string) =>
-  z.string().min(1, `${fieldName} is required`);
+import { requiredField } from "../util/util";
 
 export const activitySchema = z.object({
   title: requiredField("Title")

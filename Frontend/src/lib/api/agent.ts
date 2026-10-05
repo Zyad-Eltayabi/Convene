@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { router } from "../../app/router/Route.tsx";
 const agent = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
 });
 
 agent.interceptors.request.use((config) => {
