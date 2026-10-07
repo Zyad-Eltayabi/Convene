@@ -13,4 +13,5 @@ public class Activity
     public string Venue { get; set; } = string.Empty;
     public double Latitude { get; set; }
     public double Longitude { get; set; }
- }
+    public ICollection<ActivityAttendee> Attendees { get; set; } = new List<ActivityAttendee>();
+}

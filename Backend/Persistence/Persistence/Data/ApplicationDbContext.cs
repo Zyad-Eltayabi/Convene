@@ -14,4 +14,5 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     }
 
     public DbSet<Activity> Activities { get; set; } = null!;
+    public DbSet<ActivityAttendee> ActivityAttendees { get; set; } = null!;
 }
