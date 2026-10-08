@@ -3,6 +3,7 @@ using API.Middlewares;
 using Application;
 using Domain.Entities;
 using Infrastructure;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -15,7 +16,7 @@ builder.Services.AddCors();
 
 builder.Services.AddControllers(opt =>
 {
-    var policy = new AuthorizationPolicyBuilder()
+    AuthorizationPolicy policy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
     opt.Filters.Add(new AuthorizeFilter(policy));
@@ -36,6 +37,16 @@ builder.Services.AddIdentityApiEndpoints<User>(opt =>
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddTransient<ExceptionMiddleware>();
+
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("IsActivityHost", policy =>
+    {
+        policy.Requirements.Add(new IsHostRequirement());
+    });
+});
+
+builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
 WebApplication app = builder.Build();
 
@@ -68,6 +79,6 @@ app.MapControllers();
 app.MapGroup("api")
     .MapIdentityApi<User>();
 // pause the database initialization for now, as it may not be needed in all environments
- await app.InitializeDatabaseAsync();
+await app.InitializeDatabaseAsync();
 
 app.Run();

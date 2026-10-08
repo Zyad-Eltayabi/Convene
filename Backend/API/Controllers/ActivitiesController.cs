@@ -3,6 +3,7 @@ using Application.Activities.DTOs;
 using Application.Activities.Queries;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -24,13 +25,16 @@ public class ActivitiesController : BaseApiController
         return HandleResult(await Mediator.Send(new CreateActivity.Command { Activity = activityDto }));
     }
 
-    [HttpPut()]
-    public async Task<IActionResult> EditActivity(EditActivityDto activity)
+    [HttpPut("{id}")]
+    [Authorize("IsActivityHost")]
+    public async Task<IActionResult> EditActivity(string id,EditActivityDto activity)
     {
+        activity.Id = id;
         return HandleResult(await Mediator.Send(new EditActivity.Command { Activity = activity }));
     }
 
     [HttpDelete("{id}")]
+    [Authorize("IsActivityHost")]
     public async Task<IActionResult> DeleteActivity(string id)
     {
         return HandleResult(await Mediator.Send(new DeleteActivity.Command { Id = id }));

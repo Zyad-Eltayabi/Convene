@@ -17,5 +17,6 @@
 	  <ProjectReference Include="..\Application\Application.csproj" />
 	  <ProjectReference Include="..\Domain\Domain.csproj" />
 	  <ProjectReference Include="..\Persistence\Persistence.csproj" />
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 </Project>
