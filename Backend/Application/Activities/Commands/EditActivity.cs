@@ -2,8 +2,8 @@ using Application.Activities.DTOs;
 using Application.Core;
 using AutoMapper;
 using Domain.Entities;
-using Infrastructure.Persistence.Data;
 using MediatR;
+using Persistence.Data;
 
 namespace Application.Activities.Commands;
 
@@ -34,7 +34,7 @@ public class EditActivity
             }
 
             _mapper.Map(request.Activity, activity);
-            var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+            bool result = await _context.SaveChangesAsync(cancellationToken) > 0;
             return !result ? Result<Unit>.Failure("Failed to update activity", 400) : Result<Unit>.Success(Unit.Value);
         }
     }

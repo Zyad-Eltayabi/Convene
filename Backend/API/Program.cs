@@ -3,10 +3,10 @@ using API.Middlewares;
 using Application;
 using Domain.Entities;
 using Infrastructure;
-using Infrastructure.Persistence.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Persistence.Data;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

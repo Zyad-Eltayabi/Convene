@@ -1,8 +1,8 @@
 using Domain.Entities;
 using Infrastructure.Persistence;
-using Infrastructure.Persistence.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Data;
 
 namespace API.Extensions;
 

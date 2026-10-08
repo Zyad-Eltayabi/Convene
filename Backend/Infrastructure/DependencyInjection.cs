@@ -1,9 +1,9 @@
 ﻿using Application.Interfaces;
-using Infrastructure.Persistence.Data;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence.Data;
 
 namespace Infrastructure;
 

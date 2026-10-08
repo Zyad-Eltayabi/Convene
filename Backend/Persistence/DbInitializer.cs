@@ -1,6 +1,6 @@
 using Domain.Entities;
-using Infrastructure.Persistence.Data;
 using Microsoft.AspNetCore.Identity;
+using Persistence.Data;
 
 namespace Infrastructure.Persistence;
 

@@ -2,8 +2,8 @@
 using Application.Core;
 using AutoMapper;
 using Domain.Entities;
-using Infrastructure.Persistence.Data;
 using MediatR;
+using Persistence.Data;
 
 namespace Application.Activities.Commands;
 
