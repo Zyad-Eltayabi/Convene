@@ -1,6 +1,7 @@
 ﻿using Application.Activities.DTOs;
 using Application.Core;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +21,7 @@ public class GetActivityDetails
         public async Task<Result<ActivityDto>> Handle(Query request, CancellationToken cancellationToken)
         {
             var activity = await context.Activities
-                .Include(x => x.Attendees)
-                .ThenInclude(x => x.User).
+                .ProjectTo<ActivityDto>(mapper.ConfigurationProvider).
                 FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if(activity is null)
