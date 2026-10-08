@@ -1,4 +1,5 @@
 ﻿using Application.Activities.DTOs;
+using Application.Profiles.DTOs;
 using AutoMapper;
 using Domain.Entities;
 
@@ -10,6 +11,18 @@ public class MappingProfiles : Profile
     {
         CreateMap<CreateActivityDto, Activity>().ReverseMap();
         CreateMap<EditActivityDto, Activity>().ReverseMap();
+
+        CreateMap<Activity, ActivityDto>()
+            .ForMember(d => d.HostDisplayName, o => o.MapFrom(s => s.Attendees.FirstOrDefault(x => x.IsHost)!.User.DisplayName))
+            .ForMember(d => d.HostId, o => o.MapFrom(s => s.Attendees.FirstOrDefault(x => x.IsHost)!.User.Id));
+
+        CreateMap<ActivityAttendee, UserProfileDto>()
+        .ForMember(d => d.Id, o => o.MapFrom(s => s.User.Id))
+        .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
+        .ForMember(d => d.Bio, o => o.MapFrom(s => s.User.Bio))
+        .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.User.ImageUrl));
+
+
 
     }
 }
