@@ -15,6 +15,13 @@ export const useActivities = (id?: string) => {
     },
     staleTime: 1000 * 60 * 3,
     enabled: !id && location.pathname === "/activities" && !!currentUser,
+    select: (data) => {
+      return data.map((activity) => ({
+        ...activity,
+        isGoing: activity.attendees.some((attendee) => attendee.id === currentUser?.id),
+        isHost: activity.hostId === currentUser?.id,
+      }));
+    }
   });
 
   const { data: activity, isLoading: isActivityLoading } = useQuery({
@@ -25,6 +32,11 @@ export const useActivities = (id?: string) => {
       return response.data;
     },
     enabled: !!id && !!currentUser, // Only run this query if an id is provided
+    select: (data) => ({
+      ...data,
+      isGoing: data.attendees.some((attendee) => attendee.id === currentUser?.id),
+      isHost: data.hostId === currentUser?.id,
+    }),
   });
 
   const updateActivity = useMutation({

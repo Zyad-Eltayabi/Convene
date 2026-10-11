@@ -18,11 +18,12 @@ type Props = {
 };
 
 export default function ActivityCard({ activity }: Props) {
-  const isHost = false;
-  const isGoing = false;
-  const isCancelled = false;
-  const color = isHost ? "secondary" : isGoing ? "warning" : "default";
-  const label = isHost
+  const color = activity.isHost
+    ? "secondary"
+    : activity.isGoing
+      ? "warning"
+      : "default";
+  const label = activity.isHost
     ? "You are hosting this activity"
     : "You are going to this activity";
   return (
@@ -34,15 +35,18 @@ export default function ActivityCard({ activity }: Props) {
           titleTypographyProps={{ fontSize: 20, fontWeight: "bold" }}
           subHeader={
             <>
-              Hosted by <Link to={`/profiles/bob`}>bob</Link>
+              Hosted by{" "}
+              <Link to={`/profiles/${activity.hostId}`}>
+                {activity.hostDisplayName}
+              </Link>
             </>
           }
         />
         <Box display="flex" flexDirection="column" gap={2} mr={2}>
-          {(isHost || isGoing) && (
+          {(activity.isHost || activity.isGoing) && (
             <Chip label={label} color={color} sx={{ borderRadius: 2 }} />
           )}
-          {isCancelled && (
+          {activity.isCancelled && (
             <Chip label="Cancelled" color="error" sx={{ borderRadius: 2 }} />
           )}
         </Box>
@@ -66,7 +70,16 @@ export default function ActivityCard({ activity }: Props) {
           gap={2}
           sx={{ backgroundColor: "grey.200", py: 3, pl: 3 }}
         >
-          Attendees go here
+          {activity.attendees.map((attendee) => (
+            <Avatar
+              key={attendee.id}
+              src={attendee.imageUrl}  
+              alt={attendee.displayName}
+              sx={{ width: 40, height: 40 }}
+              component={Link}
+              to={`/profiles/${attendee.id}`}
+            />
+          ))}
         </Box>
       </CardContent>
       <CardContent sx={{ paddingBottom: 3 }}>
