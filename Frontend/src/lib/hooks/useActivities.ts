@@ -18,10 +18,12 @@ export const useActivities = (id?: string) => {
     select: (data) => {
       return data.map((activity) => ({
         ...activity,
-        isGoing: activity.attendees.some((attendee) => attendee.id === currentUser?.id),
+        isGoing: activity.attendees.some(
+          (attendee) => attendee.id === currentUser?.id,
+        ),
         isHost: activity.hostId === currentUser?.id,
       }));
-    }
+    },
   });
 
   const { data: activity, isLoading: isActivityLoading } = useQuery({
@@ -34,7 +36,9 @@ export const useActivities = (id?: string) => {
     enabled: !!id && !!currentUser, // Only run this query if an id is provided
     select: (data) => ({
       ...data,
-      isGoing: data.attendees.some((attendee) => attendee.id === currentUser?.id),
+      isGoing: data.attendees.some(
+        (attendee) => attendee.id === currentUser?.id,
+      ),
       isHost: data.hostId === currentUser?.id,
     }),
   });
@@ -67,6 +71,15 @@ export const useActivities = (id?: string) => {
     },
   });
 
+  const updateAttendance = useMutation({
+    mutationFn: async (activityId: string) => {
+      await agent.post(`/activities/${activityId}/attend`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["activities"] });
+    },
+  });
+
   return {
     activities,
     isLoading,
@@ -75,5 +88,6 @@ export const useActivities = (id?: string) => {
     deleteActivity,
     activity,
     isActivityLoading,
+    updateAttendance,
   };
 };

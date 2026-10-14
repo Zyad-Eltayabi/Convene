@@ -40,7 +40,7 @@ export default function ActivityInfo({activity}: Props) {
                     <Typography>
                         {activity.venue}, {activity.city}
                     </Typography>
-                    <Button onClick={() => setMapOpen(!mapOpen)}>{mapOpen ? "Hide Map" : "Show Map"}</Button>
+                    <Button sx={{whiteSpace: 'nowrap'}} onClick={() => setMapOpen(!mapOpen)}>{mapOpen ? "Hide Map" : "Show Map"}</Button>
                 </Grid>
             </Grid>
             {mapOpen && activity.latitude && activity.longitude && (
