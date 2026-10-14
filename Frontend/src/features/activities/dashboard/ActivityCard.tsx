@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router";
 import { formatDate } from "../../../lib/util/util";
+import AvatarPopover from "../../../app/shared/components/AvatarPopover";
 
 type Props = {
   activity: Activity;
@@ -71,14 +72,7 @@ export default function ActivityCard({ activity }: Props) {
           sx={{ backgroundColor: "grey.200", py: 3, pl: 3 }}
         >
           {activity.attendees.map((attendee) => (
-            <Avatar
-              key={attendee.id}
-              src={attendee.imageUrl}  
-              alt={attendee.displayName}
-              sx={{ width: 40, height: 40 }}
-              component={Link}
-              to={`/profiles/${attendee.id}`}
-            />
+            <AvatarPopover key={attendee.id} profile={attendee} />
           ))}
         </Box>
       </CardContent>
