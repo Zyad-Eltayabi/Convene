@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Infrastructure.Photos;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,13 +13,15 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         AddApplicationDbContext(services, configuration);
-        RegisterRepositories(services);
+        RegisterServices(services);
         return services;
     }
 
-    private static void RegisterRepositories(IServiceCollection services)
+    private static void RegisterServices(IServiceCollection services)
     {
         services.AddScoped<IUserAccessor, UserAccessor>();
+        services.AddScoped<IPhotoService, PhotoService>();
+        services.AddSingleton<CloudinarySettings>();
     }
 
     private static void AddApplicationDbContext(IServiceCollection services, IConfiguration configuration)
