@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace Domain.Entities;
 
 public class Photo
 {
@@ -6,5 +8,6 @@ public class Photo
     public required string Url { get; set; }
     public required string PublicId { get; set; }
     public required string UserId { get; set; }
+    [JsonIgnore]
     public User User { get; set; } = null!;
 }
