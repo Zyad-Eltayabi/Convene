@@ -30,7 +30,7 @@ public class PhotoService : IPhotoService
 
     }
 
-    public async Task<PhotoUploadResult> UploadPhoto(IFormFile file)
+    public async Task<PhotoUploadResult?> UploadPhoto(IFormFile file)
     {
         if (file.Length > 0)
         {
