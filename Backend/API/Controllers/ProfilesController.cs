@@ -15,7 +15,7 @@ public class ProfilesController : BaseApiController
             new Application.Profiles.Commands.AddPhoto.Command { File = file }));
     }
 
-    [HttpDelete("{photoId}")]
+    [HttpDelete("{photoId}/photos")]
     public async Task<IActionResult> DeletePhoto(string photoId)
     {
         return HandleResult(await Mediator.Send(
